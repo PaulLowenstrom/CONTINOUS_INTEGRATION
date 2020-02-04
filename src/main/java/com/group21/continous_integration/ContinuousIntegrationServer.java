@@ -1,12 +1,12 @@
+package com.group21.continous_integration;
+
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
- 
-import java.io.IOException;
- 
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jgit.api.*;
 
 /** 
  Skeleton of a ContinuousIntegrationServer which acts as webhook
@@ -32,14 +32,5 @@ public class ContinuousIntegrationServer extends AbstractHandler
         // 2nd compile the code
 
         response.getWriter().println("CI job done");
-    }
- 
-    // used to start the CI server in command line
-    public static void main(String[] args) throws Exception
-    {
-        Server server = new Server(8080);
-        server.setHandler(new ContinuousIntegrationServer()); 
-        server.start();
-        server.join();
     }
 }

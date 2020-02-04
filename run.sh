@@ -1,4 +1,9 @@
-javac -cp servlet-api-2.5.jar:jetty-all-7.0.2.v20100331.jar ContinuousIntegrationServer.java &&
+#!/bin/bash
 
-JETTY_VERSION=7.0.2.v20100331 &&
-java -cp .:servlet-api-2.5.jar:jetty-all-$JETTY_VERSION.jar ContinuousIntegrationServer
+if [ ! -d "target" ] ; then
+	  echo "Installing Maven dependencies..."
+	    mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+fi
+
+mvn compile -q &&
+	mvn exec:java -Dexec.mainClass="com.group21.continous_integration.App"
