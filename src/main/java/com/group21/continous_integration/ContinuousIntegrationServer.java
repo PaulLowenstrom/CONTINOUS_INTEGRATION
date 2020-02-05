@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.eclipse.jgit.api.*;
 
 /** 
  Skeleton of a ContinuousIntegrationServer which acts as webhook
@@ -24,13 +23,13 @@ public class ContinuousIntegrationServer extends AbstractHandler
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
 
-        System.out.println(target);
+        System.out.println("* Handling request: " + target);
 
-        // here you do all the continuous integration tasks
-        // for example
-        // 1st clone your repository
-        // 2nd compile the code
+        Integration integ = new Integration("https://github.com/perfah/CONTINOUS_INTEGRATION.git", "master");
+        
+        Integration.IntegrationResult compilationResult = integ.compile();
+        System.out.println("* Compilation returned: " + compilationResult.toString());
 
-        response.getWriter().println("CI job done");
+        response.getWriter().println("CI job done: " + compilationResult.toString());
     }
 }
