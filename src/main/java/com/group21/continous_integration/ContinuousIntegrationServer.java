@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jgit.api.*;
+import org.apache.commons.io.IOUtils;
 
 /** 
  Skeleton of a ContinuousIntegrationServer which acts as webhook
@@ -25,6 +26,16 @@ public class ContinuousIntegrationServer extends AbstractHandler
         baseRequest.setHandled(true);
 
         System.out.println(target);
+
+        if(request.getMethod().equals("POST")){
+            String payload = IOUtils.toString(request.getReader());
+
+            GitRequest req = new GitRequest(payload);
+
+            System.out.println(req.author);
+            
+           
+        }
 
         // here you do all the continuous integration tasks
         // for example
