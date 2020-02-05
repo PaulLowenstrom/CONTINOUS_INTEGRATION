@@ -16,6 +16,8 @@ public class App
         System.out.println("* Starting CI-service...");
         PropertyConfigurator.configure("log4j.properties");
 
+        BuildHistory.load();
+        
         Server server = new Server(8080);
         server.setHandler(new ContinuousIntegrationServer()); 
         server.start();

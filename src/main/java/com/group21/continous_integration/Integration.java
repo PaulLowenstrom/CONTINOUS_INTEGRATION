@@ -8,35 +8,24 @@ import java.util.Arrays;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.FileSystems;
+import java.io.Serializable;
 
 public class Integration
 {
-    protected Git repository = null;
+    private String repoName;
+    private String branch;
+    private Git repository = null;
     private InvocationRequest request;
     private Invoker invoker;
-
-    public class IntegrationResult
-    {
-        public boolean okay = false;
-        public String message = null;
-
-        public IntegrationResult(InvocationResult result)
-        {
-            okay = result.getExitCode() == 0;
-            if(result.getExecutionException() != null)
-                message = result.getExecutionException().getMessage();
-        }
-
-        @Override
-        public String toString(){
-            return (okay ? "success" : "fail (" + message + ")");
-        }
-    }
+    private BuildResult lastBuildResult;
 
     public Integration(String cloneURL, String branch)
     {
+        repoName = cloneURL.substring(cloneURL.lastIndexOf("/") + 1, cloneURL.length()).replace(".git", "");
+        this.branch = branch;
+
         Path integrationsDir = new File("").toPath().resolve("integrations");
-        Path repoDir = integrationsDir.resolve(cloneURL.substring(cloneURL.lastIndexOf("/") + 1, cloneURL.length()).replace(".git", ""));
+        Path repoDir = integrationsDir.resolve(repoName);
 
         File branchDir = repoDir.resolve(branch).toFile();
         
@@ -69,15 +58,30 @@ public class Integration
         System.out.println("done!");    
     }
 
-    public IntegrationResult compile()
+    public BuildResult build()
     {
+        lastBuildResult = new BuildResult();
+
         request.setGoals(Arrays.asList("compile"));
         request.setShowErrors(true);
+        request.setBatchMode(true);
+        request.setOutputHandler(new InvocationOutputHandler(){
+            @Override
+            public void consumeLine(String line) {
+                lastBuildResult.log += line + "\n";
+            }
+        });
         
         InvocationResult result;
         try{
             result = invoker.execute(request);
-            return new IntegrationResult(result);
+            lastBuildResult.repository = repoName;
+            lastBuildResult.branch = branch;
+            lastBuildResult.linkedCommit = "TODO";
+            lastBuildResult.status = result.getExitCode() == 0;
+            lastBuildResult.message = result.getExecutionException() != null ? result.getExecutionException().getMessage() : null;
+            
+            return lastBuildResult;
         } 
         catch(MavenInvocationException e)
         {
