@@ -29,7 +29,7 @@ public class App
         Invoker invoker = new DefaultInvoker();
         InvocationResult result = invoker.execute( request );
         
-result.getExecutionException()
+        result.getExecutionException();
         System.out.println("=======================================");
         System.out.println("EXIT CODE = " + result.getExitCode());
         System.out.println("ERROR");
