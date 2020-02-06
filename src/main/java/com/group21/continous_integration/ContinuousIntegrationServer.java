@@ -25,11 +25,28 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
         System.out.println("* Handling request: " + target);
 
-        Integration integ = new Integration("https://github.com/perfah/CONTINOUS_INTEGRATION.git", "master");
-        
-        Integration.IntegrationResult compilationResult = integ.compile();
-        System.out.println("* Compilation returned: " + compilationResult.toString());
+        if(target.equalsIgnoreCase("/")){
+            Integration integ = new Integration("https://github.com/perfah/CONTINOUS_INTEGRATION.git", "master");
+            
+            BuildResult compilation = integ.build();
+            BuildHistory.getInstance().insert(compilation);
 
-        response.getWriter().println("CI job done: " + compilationResult.toString());
+            System.out.println("* Compilation returned: " + compilation.status);
+    
+            response.getWriter().println("CI job done: " + compilation.status);
+        }
+        else if(target.equalsIgnoreCase("/history")){
+            
+
+            String specifiedBuild = request.getParameter("build");
+            if(specifiedBuild != null){        
+                System.out.println("* Sending info for build #" + specifiedBuild);        
+                response.getWriter().println(BuildHistory.getInstance().getBuildInfoWebPage(Integer.parseInt(specifiedBuild)));
+            }
+            else{
+                System.out.println("* Sending build history list");
+                response.getWriter().println(BuildHistory.getInstance().getBuildListWebPage());
+            }
+        }
     }
 }
