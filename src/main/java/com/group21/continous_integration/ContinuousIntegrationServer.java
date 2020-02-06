@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.eclipse.jgit.api.*;
 import org.apache.commons.io.IOUtils;
+
 
 /** 
  Skeleton of a ContinuousIntegrationServer which acts as webhook
@@ -25,23 +25,38 @@ public class ContinuousIntegrationServer extends AbstractHandler
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
 
-        System.out.println(target);
+        System.out.println("* Handling request: " + target);
+
 
         if(request.getMethod().equals("POST")){
             String payload = IOUtils.toString(request.getReader());
-
-            GitRequest req = new GitRequest(payload);
-
-            System.out.println(req.author);
-            
+            GitRequest req = new GitRequest(payload);  
            
         }
 
-        // here you do all the continuous integration tasks
-        // for example
-        // 1st clone your repository
-        // 2nd compile the code
+        if(target.equalsIgnoreCase("/")){
+            Integration integ = new Integration("https://github.com/perfah/CONTINOUS_INTEGRATION.git", "master");
+            
+            BuildResult compilation = integ.build();
+            BuildHistory.getInstance().insert(compilation);
 
-        response.getWriter().println("CI job done");
+
+            System.out.println("* Compilation returned: " + compilation.status);
+    
+            response.getWriter().println("CI job done: " + compilation.status);
+        }
+        else if(target.equalsIgnoreCase("/history")){
+            
+
+            String specifiedBuild = request.getParameter("build");
+            if(specifiedBuild != null){        
+                System.out.println("* Sending info for build #" + specifiedBuild);        
+                response.getWriter().println(BuildHistory.getInstance().getBuildInfoWebPage(Integer.parseInt(specifiedBuild)));
+            }
+            else{
+                System.out.println("* Sending build history list");
+                response.getWriter().println(BuildHistory.getInstance().getBuildListWebPage());
+            }
+        }
     }
 }
