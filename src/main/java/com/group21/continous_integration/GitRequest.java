@@ -8,7 +8,7 @@ public class GitRequest{
     public String commit_hash;
     public String branch;
     public String email_addr;
-
+    public String statuses_url;
 
     public GitRequest(String payload){
         //make JSON object
@@ -21,6 +21,7 @@ public class GitRequest{
         this.branch = jsonObject.get("ref").toString();
         this.commit_hash = jsonObject.getJSONObject("head_commit").get("id").toString();
         this.email_addr = jsonObject.getJSONObject("pusher").get("email").toString();
+        this.statuses_url = jsonObject.getJSONObject("repository").get("statuses_url").toString();
     }
 
 }
