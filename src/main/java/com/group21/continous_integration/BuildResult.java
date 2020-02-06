@@ -17,6 +17,8 @@ public class BuildResult implements Serializable
     public String branch = null;
     public String linkedCommit = null;
     public boolean status = false;
+    public boolean testStatus = false;
     public String message = null;
+    public String testMessage = null;
     public String log = "";
 }

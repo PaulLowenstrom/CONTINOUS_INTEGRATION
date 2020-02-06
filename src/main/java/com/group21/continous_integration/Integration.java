@@ -18,6 +18,7 @@ public class Integration
     private InvocationRequest request;
     private Invoker invoker;
     private BuildResult lastBuildResult;
+    private File branchDir;
 
     public Integration(String cloneURL, String branch)
     {
@@ -27,7 +28,7 @@ public class Integration
         Path integrationsDir = new File("").toPath().resolve("integrations");
         Path repoDir = integrationsDir.resolve(repoName);
 
-        File branchDir = repoDir.resolve(branch).toFile();
+        branchDir = repoDir.resolve(branch).toFile();
         
         int version = 1;
         File newBranchDir = branchDir;
@@ -80,6 +81,8 @@ public class Integration
             lastBuildResult.linkedCommit = "TODO";
             lastBuildResult.status = result.getExitCode() == 0;
             lastBuildResult.message = result.getExecutionException() != null ? result.getExecutionException().getMessage() : null;
+
+            runTest();
             
             return lastBuildResult;
         } 
@@ -87,5 +90,38 @@ public class Integration
         {
             return null;
         }
+    }
+
+    public void runTest() {
+
+        // Reset from build() run
+        request = new DefaultInvocationRequest();
+        request.setPomFile(branchDir.toPath().resolve("pom.xml").toFile());
+
+        invoker = new DefaultInvoker();
+
+        // Setup for test run
+        request.setGoals(Arrays.asList("test"));
+        request.setShowErrors(true);
+        request.setBatchMode(true);
+        request.setOutputHandler(new InvocationOutputHandler(){
+            @Override
+            public void consumeLine(String line) {
+                lastBuildResult.log += line + "\n";
+            }
+        });
+
+        // Execute test
+        InvocationResult result;
+        try{
+            result = invoker.execute(request);
+            lastBuildResult.testStatus = result.getExitCode() == 0;
+            lastBuildResult.testMessage = result.getExecutionException() != null ? result.getExecutionException().getMessage() : null;
+        } 
+        catch(MavenInvocationException e)
+        {
+            return;
+        }
+
     }
 }
