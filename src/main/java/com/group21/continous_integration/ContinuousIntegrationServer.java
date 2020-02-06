@@ -27,12 +27,12 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
         System.out.println("* Handling request: " + target);
 
-
+        GitRequest req = null;
         if(request.getMethod().equals("POST")){
             
             String payload = IOUtils.toString(request.getReader());
             
-            GitRequest req = new GitRequest(payload); 
+            req = new GitRequest(payload); 
             /* //PRINTS FOR TESTING
             System.out.println(req.email_addr);
             System.out.println(req.commit_hash);
@@ -46,7 +46,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
         }
 
         if(target.equalsIgnoreCase("/")){
-            Integration integ = new Integration("https://github.com/perfah/CONTINOUS_INTEGRATION.git", "master");
+            Integration integ = new Integration("https://github.com/perfah/CONTINOUS_INTEGRATION.git", req);
             
             BuildResult compilation = integ.build();
             BuildHistory.getInstance().insert(compilation);
