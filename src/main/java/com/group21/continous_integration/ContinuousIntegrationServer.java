@@ -32,14 +32,17 @@ public class ContinuousIntegrationServer extends AbstractHandler
             
             String payload = IOUtils.toString(request.getReader());
             
-            GitRequest req = new GitRequest(payload);  
+            GitRequest req = new GitRequest(payload); 
+            /* //PRINTS FOR TESTING
             System.out.println(req.email_addr);
             System.out.println(req.commit_hash);
             System.out.println(req.branch);
             System.out.println(req.cloneUrl);
             System.out.println(req.repository);
             System.out.println(req.author);
-           
+            System.out.println(req.statuses_url);
+            */
+            
         }
 
         if(target.equalsIgnoreCase("/")){
