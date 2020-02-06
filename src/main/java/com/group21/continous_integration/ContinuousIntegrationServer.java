@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.apache.commons.io.IOUtils;
+
 
 /** 
  Skeleton of a ContinuousIntegrationServer which acts as webhook
@@ -25,11 +27,19 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
         System.out.println("* Handling request: " + target);
 
+
+        if(request.getMethod().equals("POST")){
+            String payload = IOUtils.toString(request.getReader());
+            GitRequest req = new GitRequest(payload);  
+           
+        }
+
         if(target.equalsIgnoreCase("/")){
             Integration integ = new Integration("https://github.com/perfah/CONTINOUS_INTEGRATION.git", "master");
             
             BuildResult compilation = integ.build();
             BuildHistory.getInstance().insert(compilation);
+
 
             System.out.println("* Compilation returned: " + compilation.status);
     

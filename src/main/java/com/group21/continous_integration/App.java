@@ -18,6 +18,7 @@ public class App
 
         BuildHistory.load();
         
+
         Server server = new Server(8080);
         server.setHandler(new ContinuousIntegrationServer()); 
         server.start();
