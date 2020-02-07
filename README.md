@@ -13,16 +13,15 @@ To be able to run this project you need the following program installed on your 
 - ngrok
 
 ###### RUNNING THE PROGRAM
-
+./run.sh
 
 
 ###### TESTING THE PROGRAM
+mvn test
 
+###### SHOWING BUILD HISTORY
 
-
-###### INTERPRETING OUTPUT
-
-
+Go to: http://6201f7e3.ngrok.io/history
 
 #### STATEMENT OF CONTRIBUTIONS
 
