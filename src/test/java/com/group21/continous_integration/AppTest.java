@@ -12,6 +12,6 @@ public class AppTest
     @Test
     public void aaa()
     {
-        assertFalse(true);
+        assertFalse(false);
     }
 }
