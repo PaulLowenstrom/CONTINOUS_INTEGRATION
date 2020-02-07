@@ -51,7 +51,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
             BuildResult compilation = integ.build();
             BuildHistory.getInstance().insert(compilation);
 
-            boolean testStatus = integ.runTest();
+            boolean testStatus = integ.test();
 
             System.out.println("* Test returned: " + testStatus);
 

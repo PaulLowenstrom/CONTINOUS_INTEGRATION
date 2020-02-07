@@ -57,17 +57,6 @@ public class Integration
 
         request = new DefaultInvocationRequest();
         request.setPomFile(branchDir.toPath().resolve("pom.xml").toFile());
-
-        invoker = new DefaultInvoker();
-
-        System.out.println("done!");    
-    }
-
-    public BuildResult build()
-    {
-        lastBuildResult = new BuildResult();
-
-        request.setGoals(Arrays.asList("compile"));
         request.setShowErrors(true);
         request.setBatchMode(true);
         request.setOutputHandler(new InvocationOutputHandler(){
@@ -77,6 +66,20 @@ public class Integration
             }
         });
         
+        invoker = new DefaultInvoker();
+        invoker.setMavenHome(new File(System.getenv().get("MAVEN_HOME")));
+        invoker.setLocalRepositoryDirectory(branchDir);
+
+        System.out.println("done!");    
+    }
+
+    public BuildResult build()
+    {
+        lastBuildResult = new BuildResult();
+
+        request.setGoals(Arrays.asList("compile"));
+        
+
         InvocationResult result;
         try{
             result = invoker.execute(request);
@@ -91,28 +94,15 @@ public class Integration
         } 
         catch(MavenInvocationException e)
         {
+            System.err.println(e.getMessage());
             return null;
         }
     }
+    
 
-    public boolean runTest() {
+    public boolean test() {
 
-        // Reset from build() run
-        request = new DefaultInvocationRequest();
-        request.setPomFile(branchDir.toPath().resolve("pom.xml").toFile());
-
-        invoker = new DefaultInvoker();
-
-        // Setup for test run
         request.setGoals(Arrays.asList("test"));
-        request.setShowErrors(true);
-        request.setBatchMode(true);
-        request.setOutputHandler(new InvocationOutputHandler(){
-            @Override
-            public void consumeLine(String line) {
-                lastBuildResult.log += line + "\n";
-            }
-        });
 
         // Execute test
         InvocationResult result;
