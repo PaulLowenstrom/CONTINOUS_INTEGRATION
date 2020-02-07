@@ -21,7 +21,7 @@ public class IntegrationTest
         String commit = "cbd65ee1ecc826a078a1fbd507f720a7a6a858b5";
         String branch = "master";
 
-        String json = "{\"ref\": \"" + branch + "\",\"repository\":{\"name\":\"" + repoName + "\",\"statuses_url\":\"www.status.com\",\"clone_url\":\"" + cloneUrl + "\"},\"head_commit\":{\"id\":\"" + commit +  "\"},\"pusher\":{\"email\":\"test@test.com\",\"name\":\"johan\"}}";
+        String json = "{\"ref\": \"ref/heads/" + branch + "\",\"repository\":{\"name\":\"" + repoName + "\",\"statuses_url\":\"www.status.com\",\"clone_url\":\"" + cloneUrl + "\"},\"head_commit\":{\"id\":\"" + commit +  "\"},\"pusher\":{\"email\":\"test@test.com\",\"name\":\"johan\"}}";
 
         GitRequest req = new GitRequest(json);
 
@@ -43,7 +43,7 @@ public class IntegrationTest
         String commit = "cbd65ee1ecc826a078a1fbd507f720a7a6a858b5";
         String branch = "assesments";
 
-        String json = "{\"ref\": \"" + branch + "\",\"repository\":{\"name\":\"" + repoName + "\",\"statuses_url\":\"www.status.com\",\"clone_url\":\"" + cloneUrl + "\"},\"head_commit\":{\"id\":\"" + commit +  "\"},\"pusher\":{\"email\":\"test@test.com\",\"name\":\"johan\"}}";
+        String json = "{\"ref\": \"ref/heads/" + branch + "\",\"repository\":{\"name\":\"" + repoName + "\",\"statuses_url\":\"www.status.com\",\"clone_url\":\"" + cloneUrl + "\"},\"head_commit\":{\"id\":\"" + commit +  "\"},\"pusher\":{\"email\":\"test@test.com\",\"name\":\"johan\"}}";
 
         GitRequest req = new GitRequest(json);
 

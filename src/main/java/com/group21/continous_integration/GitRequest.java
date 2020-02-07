@@ -20,7 +20,7 @@ public class GitRequest{
             this.author = jsonObject.getJSONObject("pusher").get("name").toString();
             this.repository = jsonObject.getJSONObject("repository").get("name").toString();
             this.cloneUrl = jsonObject.getJSONObject("repository").get("clone_url").toString();
-            this.branch = jsonObject.get("ref").toString();
+            this.branch = jsonObject.get("ref").toString().split("/")[2];
             this.commit_hash = jsonObject.getJSONObject("head_commit").get("id").toString();
             this.email_addr = jsonObject.getJSONObject("pusher").get("email").toString();
             this.statuses_url = jsonObject.getJSONObject("repository").get("statuses_url").toString();
