@@ -24,4 +24,16 @@ public class GitRequest{
         this.statuses_url = jsonObject.getJSONObject("repository").get("statuses_url").toString();
     }
 
+    public GitRequest(String author, String repository, String cloneURL, String commit_hash, String branch, String email_addr, String statuses_url) {
+        // Set parameters without payload object
+        this.author = author;
+        this.repository = repository;
+        this.cloneUrl = cloneURL;
+        this.commit_hash = commit_hash;
+        this.branch = branch;
+        this.email_addr = email_addr;
+        this.statuses_url = statuses_url;
+
+    }
+
 }
