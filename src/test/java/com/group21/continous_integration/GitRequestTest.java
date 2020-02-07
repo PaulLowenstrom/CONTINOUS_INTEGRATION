@@ -28,7 +28,7 @@ public class GitRequestTest
         assertEquals(correct.commit_hash, "hash");
 
          // The author is stored correctly
-         assertEquals(correct.author, "johan");
+         assertEquals(correct.author, "j123123123ohan");
 
          // The clone url is stored correctly
          assertEquals(correct.cloneUrl, "www.clone.com");
