@@ -14,16 +14,20 @@ public class Integration
 {
     private String repoName;
     private String branch;
-    private Git repository = null;
+    private String URL;
+    private Git repository;
+    private GitRequest req;
     private InvocationRequest request;
     private Invoker invoker;
     private BuildResult lastBuildResult;
     private File branchDir;
 
-    public Integration(String cloneURL, String branch)
+    public Integration(GitRequest req)
     {
-        repoName = cloneURL.substring(cloneURL.lastIndexOf("/") + 1, cloneURL.length()).replace(".git", "");
-        this.branch = branch;
+        this.req = req;
+        repoName = req.repository;
+        branch = req.branch;
+        URL = req.cloneUrl;
 
         Path integrationsDir = new File("").toPath().resolve("integrations");
         Path repoDir = integrationsDir.resolve(repoName);
@@ -42,7 +46,7 @@ public class Integration
 
         try{
             repository = Git.cloneRepository()
-                .setURI(cloneURL)
+                .setURI(URL)
                 .setBranch(branch)
                 .setDirectory(branchDir)
                 .call();
@@ -78,7 +82,7 @@ public class Integration
             result = invoker.execute(request);
             lastBuildResult.repository = repoName;
             lastBuildResult.branch = branch;
-            lastBuildResult.linkedCommit = "TODO";
+            lastBuildResult.linkedCommit = req.commit_hash;
             lastBuildResult.status = result.getExitCode() == 0;
             lastBuildResult.message = result.getExecutionException() != null ? result.getExecutionException().getMessage() : null;
 
