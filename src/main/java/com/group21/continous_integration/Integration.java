@@ -14,16 +14,19 @@ public class Integration
 {
     private String repoName;
     private String branch;
+    private String URL;
+    private Git repository;
     private GitRequest req;
     private InvocationRequest request;
     private Invoker invoker;
     private BuildResult lastBuildResult;
 
-    public Integration(String cloneURL, GitRequest req)
+    public Integration(GitRequest req)
     {
         this.req = req;
         repoName = req.repository;
         branch = req.branch;
+        URL = req.cloneUrl;
 
         Path integrationsDir = new File("").toPath().resolve("integrations");
         Path repoDir = integrationsDir.resolve(repoName);
@@ -42,7 +45,7 @@ public class Integration
 
         try{
             repository = Git.cloneRepository()
-                .setURI(cloneURL)
+                .setURI(URL)
                 .setBranch(branch)
                 .setDirectory(branchDir)
                 .call();

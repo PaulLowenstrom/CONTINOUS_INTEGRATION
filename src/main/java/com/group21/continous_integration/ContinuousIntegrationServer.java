@@ -46,7 +46,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
         }
 
         if(target.equalsIgnoreCase("/")){
-            Integration integ = new Integration("https://github.com/perfah/CONTINOUS_INTEGRATION.git", req);
+            Integration integ = new Integration(req);
             
             BuildResult compilation = integ.build();
             BuildHistory.getInstance().insert(compilation);
