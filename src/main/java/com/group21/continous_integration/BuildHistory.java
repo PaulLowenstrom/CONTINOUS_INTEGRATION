@@ -79,8 +79,6 @@ public class BuildHistory implements Serializable
         buff.append("<th>" + "<u>COMMIT</u>" + "</th>");
         buff.append("<th>" + "<u>STATUS</u>" + "</th>");
         buff.append("<th>" + "<u>MESSAGE</u>" + "</th>");
-        buff.append("<th>" + "<u>TEST_STATUS</u>" + "</th>");
-        buff.append("<th>" + "<u>TEST_MESSAGE</u>" + "</th>");
         buff.append("</tr>");
 
         buff.append("<tr>");
@@ -97,8 +95,6 @@ public class BuildHistory implements Serializable
             buff.append("<td align='center'>" + (build.linkedCommit != null ? build.linkedCommit : "N/A") + "</th>");
             buff.append("<td align='center'>" + (build.status ? "PASSED" : "FAILED") + "</th>");
             buff.append("<td align='center'>" + (build.message != null ? build.message : "N/A") + "</th>");
-            buff.append("<td align='center'>" + (build.testStatus ? "PASSED" : "FAILED") + "</th>");
-            buff.append("<td align='center'>" + (build.testMessage != null ? build.testMessage : "N/A") + "</th>");
             buff.append("</tr>");
             id++;
         }
@@ -139,8 +135,6 @@ public class BuildHistory implements Serializable
         buff.append("<th>" + "<u>COMMIT</u>" + "</th>");
         buff.append("<th>" + "<u>STATUS</u>" + "</th>");
         buff.append("<th>" + "<u>MESSAGE</u>" + "</th>");
-        buff.append("<th>" + "<u>TEST_STATUS</u>" + "</th>");
-        buff.append("<th>" + "<u>TEST_MESSAGE</u>" + "</th>");
         buff.append("</tr>");
 
         buff.append("<tr>");
@@ -153,8 +147,6 @@ public class BuildHistory implements Serializable
         buff.append("<td align='center'>" + (build.linkedCommit != null ? build.linkedCommit : "N/A") + "</th>");
         buff.append("<td align='center'>" + (build.status ? "PASSED" : "FAILED") + "</th>");
         buff.append("<td align='center'>" + (build.message != null ? build.message : "N/A") + "</th>");
-        buff.append("<td align='center'>" + (build.testStatus ? "PASSED" : "FAILED") + "</th>");
-        buff.append("<td align='center'>" + (build.testMessage != null ? build.testMessage : "N/A") + "</th>");
         buff.append("</tr>");
 
         buff.append("</table><br>");

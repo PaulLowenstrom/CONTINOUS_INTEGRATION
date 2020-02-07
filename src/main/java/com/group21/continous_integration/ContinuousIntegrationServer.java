@@ -40,11 +40,13 @@ public class ContinuousIntegrationServer extends AbstractHandler
             BuildResult compilation = integ.build();
             BuildHistory.getInstance().insert(compilation);
 
-            System.out.println("* Test returned: " + compilation.testStatus);
+            boolean testStatus = integ.runTest();
+
+            System.out.println("* Test returned: " + testStatus);
 
             System.out.println("* Compilation returned: " + compilation.status);
     
-            response.getWriter().println("CI job done: " + (compilation.status && compilation.testStatus));
+            response.getWriter().println("CI job done: " + (compilation.status && testStatus));
         }
         else if(target.equalsIgnoreCase("/history")){
             

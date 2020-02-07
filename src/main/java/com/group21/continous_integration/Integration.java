@@ -82,7 +82,6 @@ public class Integration
             lastBuildResult.status = result.getExitCode() == 0;
             lastBuildResult.message = result.getExecutionException() != null ? result.getExecutionException().getMessage() : null;
 
-            runTest();
             
             return lastBuildResult;
         } 
@@ -92,7 +91,7 @@ public class Integration
         }
     }
 
-    public void runTest() {
+    public boolean runTest() {
 
         // Reset from build() run
         request = new DefaultInvocationRequest();
@@ -115,12 +114,12 @@ public class Integration
         InvocationResult result;
         try{
             result = invoker.execute(request);
-            lastBuildResult.testStatus = result.getExitCode() == 0;
-            lastBuildResult.testMessage = result.getExecutionException() != null ? result.getExecutionException().getMessage() : null;
+            return result.getExitCode() == 0;
+            
         } 
         catch(MavenInvocationException e)
         {
-            return;
+            return false;
         }
 
     }
