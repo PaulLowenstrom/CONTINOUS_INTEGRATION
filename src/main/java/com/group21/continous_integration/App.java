@@ -4,7 +4,7 @@ import org.eclipse.jetty.server.Server;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-public class App 
+public class App
 {
     public static Logger logger = Logger.getLogger(App.class);
 
@@ -15,10 +15,10 @@ public class App
         PropertyConfigurator.configure("log4j.properties");
 
         BuildHistory.load();
-        
 
+        new EmailService();
         Server server = new Server(8080);
-        server.setHandler(new ContinuousIntegrationServer()); 
+        server.setHandler(new ContinuousIntegrationServer());
         server.start();
         server.join();
     }

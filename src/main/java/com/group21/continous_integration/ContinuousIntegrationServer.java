@@ -9,7 +9,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.apache.commons.io.IOUtils;
 
 
-/** 
+/**
  Skeleton of a ContinuousIntegrationServer which acts as webhook
  See the Jetty documentation for API documentation of those classes.
 */
@@ -18,7 +18,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
     public void handle(String target,
                        Request baseRequest,
                        HttpServletRequest request,
-                       HttpServletResponse response) 
+                       HttpServletResponse response)
         throws IOException, ServletException
     {
         response.setContentType("text/html;charset=utf-8");
@@ -29,10 +29,10 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
         GitRequest req = null;
         if(request.getMethod().equals("POST")){
-            
+
             String payload = IOUtils.toString(request.getReader());
-            
-            req = new GitRequest(payload); 
+
+            req = new GitRequest(payload);
             /* //PRINTS FOR TESTING
             System.out.println(req.email_addr);
             System.out.println(req.commit_hash);
@@ -42,34 +42,41 @@ public class ContinuousIntegrationServer extends AbstractHandler
             System.out.println(req.author);
             System.out.println(req.statuses_url);
             */
-            
-        }
 
-        if(target.equalsIgnoreCase("/")){
-            Integration integ = new Integration(req);
-            
-            BuildResult compilation = integ.build();
-            BuildHistory.getInstance().insert(compilation);
+            if(target.equalsIgnoreCase("/")){
+                Integration integ = new Integration(req);
 
-            boolean testStatus = integ.test();
+                BuildResult compilation = integ.build();  
+                BuildHistory.getInstance().insert(compilation);
 
-            System.out.println("* Test returned: " + testStatus);
+                if(compilation.status){
+                    EmailService.SendBuildSuccesfull(req.email_addr, req.branch);
+                }
+                else{
+                    EmailService.SendBuildFailure(req.email_addr, req.branch);
+                }
+                
+                boolean testStatus = integ.test();
 
-            System.out.println("* Compilation returned: " + compilation.status);
-    
-            response.getWriter().println("CI job done: " + (compilation.status && testStatus));
-        }
-        else if(target.equalsIgnoreCase("/history")){
-            
-
-            String specifiedBuild = request.getParameter("build");
-            if(specifiedBuild != null){        
-                System.out.println("* Sending info for build #" + specifiedBuild);        
-                response.getWriter().println(BuildHistory.getInstance().getBuildInfoWebPage(Integer.parseInt(specifiedBuild)));
+                System.out.println("* Compilation returned: " + compilation.status);
+                System.out.println("* Test returned: " + testStatus);
+                
+                response.getWriter().println("CI job done");
+                response.getWriter().println("Compilation returned: " + compilation.status);
+                response.getWriter().println("Test returned: " + testStatus);
             }
-            else{
-                System.out.println("* Sending build history list");
-                response.getWriter().println(BuildHistory.getInstance().getBuildListWebPage());
+            else if(target.equalsIgnoreCase("/history")){
+
+
+                String specifiedBuild = request.getParameter("build");
+                if(specifiedBuild != null){
+                    System.out.println("* Sending info for build #" + specifiedBuild);
+                    response.getWriter().println(BuildHistory.getInstance().getBuildInfoWebPage(Integer.parseInt(specifiedBuild)));
+                }
+                else{
+                    System.out.println("* Sending build history list");
+                    response.getWriter().println(BuildHistory.getInstance().getBuildListWebPage());
+                }
             }
         }
     }
