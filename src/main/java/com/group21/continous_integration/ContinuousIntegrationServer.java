@@ -46,24 +46,24 @@ public class ContinuousIntegrationServer extends AbstractHandler
             if(target.equalsIgnoreCase("/")){
                 Integration integ = new Integration(req);
 
-                BuildResult compilation = integ.build();
-
-                if(compilation.status){
-                  EmailService.SendBuildSuccesfull(req.email_addr, req.branch);
-                }
-                else{
-                  EmailService.SendBuildFailure(req.email_addr, req.branch);
-                }
-
+                BuildResult compilation = integ.build();  
                 BuildHistory.getInstance().insert(compilation);
 
-                boolean testStatus = integ.runTest();
-
-                System.out.println("* Test returned: " + testStatus);
+                if(compilation.status){
+                    EmailService.SendBuildSuccesfull(req.email_addr, req.branch);
+                }
+                else{
+                    EmailService.SendBuildFailure(req.email_addr, req.branch);
+                }
+                
+                boolean testStatus = integ.test();
 
                 System.out.println("* Compilation returned: " + compilation.status);
-
-                response.getWriter().println("CI job done: " + (compilation.status && testStatus));
+                System.out.println("* Test returned: " + testStatus);
+                
+                response.getWriter().println("CI job done");
+                response.getWriter().println("Compilation returned: " + compilation.status);
+                response.getWriter().println("Test returned: " + testStatus);
             }
             else if(target.equalsIgnoreCase("/history")){
 
