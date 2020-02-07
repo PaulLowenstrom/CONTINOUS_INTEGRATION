@@ -7,6 +7,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.util.Properties;
+import java.util.HashMap;
 
 public class EmailService {
 
@@ -14,6 +15,14 @@ public class EmailService {
     private static int port = 587;
     private static String username = "CISendBuildReport@outlook.com";
     private static String password = "byggarebob123";
+    private static HashMap<String, String> users = new HashMap<String, String>();
+
+    public EmailService(){
+      users.put("paullowenstrom", "paulher@kth.se");
+      users.put("johansettlin", "settlin@kth.se");
+      users.put("per", "perfah@kth.se");
+      users.put("oliver", "oli@kth.se");
+    }
 
     public static void SendBuildSuccesfull(String sendTo, String branch){
       sendMail(sendTo, branch, "Build Succesfull");
@@ -43,7 +52,7 @@ public class EmailService {
 
                 Message message = new MimeMessage(session);
                 message.setFrom(new InternetAddress("CISendBuildReport@outlook.com"));
-                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sendTo));
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(users.get(sendTo)));
                 message.setSubject(subject);
 
                 String msg =  "Branch: " + branch + " failed to build. Please check.";
