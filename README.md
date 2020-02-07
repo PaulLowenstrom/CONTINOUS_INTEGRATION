@@ -27,13 +27,13 @@ Go to: http://6201f7e3.ngrok.io/history
 
 The project is a collaborative effort with work distributed among team members. The following is a description of what each team member did best to stand out:
 
-- Per Fahlander: 
-    - 
-- Paul Löwenström: 
-    - 
-- Oliver Schwalbe Lehtihet:
-    - 
-- Johan Settlin:
-    - 
+- Per Fahlander: Setup repository, compilation and history
+ 
+- Paul Löwenström: E-mail service
+
+- Oliver Schwalbe Lehtihet: Testing
+
+- Johan Settlin: JSON parsing
+ 
 
 TODO more to the README
