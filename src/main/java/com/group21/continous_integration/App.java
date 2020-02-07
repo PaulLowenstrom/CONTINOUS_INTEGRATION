@@ -1,7 +1,5 @@
 package com.group21.continous_integration;
 
-import java.io.File;
-import java.util.ArrayList;
 import org.eclipse.jetty.server.Server;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
