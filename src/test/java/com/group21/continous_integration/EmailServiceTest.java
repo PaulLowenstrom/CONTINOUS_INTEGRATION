@@ -11,16 +11,14 @@ import static org.junit.Assert.assertEquals;
 public class EmailServiceTest
 {
 
-    /*Test if the request class creates a json object and stores the variables correct */
+    /*Checks if email functions work correctly */
     @Test
     public void EmailCheck()
     {
-	//Check email is correct
+         // Checks that email service SendBuildSuccesfull works
+         assertTrue(EmailService.SendBuildSuccessfull("noreply@test.se", "branch"));
 
-	//Check content is correct
-
-	//Check 
-         // The email is stored correctly
-         //assertEquals(correct.email_addr, "test@test.com");
+         // Checks that email service SendBuildFailure works
+         assertTrue(EmailService.SendBuildFailure("noreply@test.se", "branch"));
     }
 }
