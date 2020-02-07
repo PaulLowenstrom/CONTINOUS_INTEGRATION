@@ -20,7 +20,7 @@ public class EmailService {
     public EmailService(){
       users.put("paullowenstrom", "paulher@kth.se");
       users.put("johansettlin", "settlin@kth.se");
-      users.put("per", "perfah@kth.se");
+      users.put("perfah", "perfah@kth.se");
       users.put("oliver", "oli@kth.se");
     }
 
